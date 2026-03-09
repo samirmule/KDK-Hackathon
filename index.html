@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI FAQ Generator for Small Businesses</title>
+
+<style>
+
+/* Background */
+body{
+font-family: 'Segoe UI', sans-serif;
+margin:0;
+padding:0;
+background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url("https://images.unsplash.com/photo-1556742031-c6961e8560b0");
+background-size: cover;
+background-position: center;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+/* Main Container */
+
+.container{
+background: rgba(255,255,255,0.1);
+backdrop-filter: blur(12px);
+padding:30px;
+border-radius:15px;
+width:500px;
+box-shadow:0px 10px 30px rgba(0,0,0,0.5);
+text-align:center;
+}
+
+/* Heading */
+
+h1{
+color:#ffcc00;
+margin-bottom:10px;
+}
+
+p{
+font-size:14px;
+opacity:0.8;
+}
+
+/* Input Fields */
+
+input, textarea{
+width:90%;
+padding:10px;
+margin:8px;
+border:none;
+border-radius:8px;
+outline:none;
+font-size:14px;
+}
+
+/* Button */
+
+button{
+background: linear-gradient(45deg,#ff7a18,#32d2aa);
+border:none;
+padding:12px 20px;
+border-radius:10px;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* FAQ Output */
+
+.faq{
+margin-top:20px;
+text-align:left;
+background:rgba(0,0,0,0.4);
+padding:15px;
+border-radius:10px;
+}
+
+.faq h3{
+color:#00ffd5;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>AI FAQ Generator</h1>
+<p>Create instant FAQs for your small business</p>
+
+<input type="text" id="name" placeholder="Business Name">
+
+<input type="text" id="type" placeholder="Business Type (Bakery, Salon, Cafe...)">
+
+<textarea id="services" placeholder="Products / Services"></textarea>
+
+<input type="text" id="location" placeholder="Location">
+
+<input type="text" id="hours" placeholder="Working Hours">
+
+<input type="text" id="delivery" placeholder="Delivery Available? (Yes/No)">
+
+<br><br>
+
+<button onclick="generateFAQ()">Generate FAQs</button>
+
+<div class="faq" id="faqBox"></div>
+
+</div>
+
+
+<script>
+
+function generateFAQ(){
+
+let name = document.getElementById("name").value;
+let type = document.getElementById("type").value;
+let services = document.getElementById("services").value;
+let location = document.getElementById("location").value;
+let hours = document.getElementById("hours").value;
+let delivery = document.getElementById("delivery").value;
+
+let faq = `
+<h3>Generated FAQs</h3>
+
+<b>1. What services does ${name} provide?</b>
+<p>${name} offers ${services}.</p>
+
+<b>2. What type of business is ${name}?</b>
+<p>${name} is a ${type} located in ${location}.</p>
+
+<b>3. What are the working hours of ${name}?</b>
+<p>${name} operates from ${hours}.</p>
+
+<b>4. Does ${name} provide delivery?</b>
+<p>Delivery service availability: ${delivery}.</p>
+
+<b>5. Where is ${name} located?</b>
+<p>${name} is located in ${location}.</p>
+`;
+
+document.getElementById("faqBox").innerHTML = faq;
+
+}
+
+</script>
+
+</body>
+</html>
