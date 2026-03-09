@@ -35,11 +35,12 @@ Excel files for documentation and website integration.
 <button onclick="sendMessage()">Send</button>
 
 <button onclick="startVoice()">🎤</button>
+<audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
 
-<label class="upload-btn">
+<!-- <label class="upload-btn">
 +
 <input type="file" id="imageUpload" onchange="handleImage()" hidden>
-</label>
+</label> -->
 </div>
 
 </div>
@@ -89,7 +90,7 @@ Excel files for documentation and website integration.
 
 <script>
 // -------------------- OpenRouter AI Chat --------------------
-const API_KEY = "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"; // your OpenRouter API key
+const API_KEY = "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"; // your OpenRouter API key
 async function sendMessage() {
     let input = document.getElementById("chatInput");
     let message = input.value;
@@ -199,11 +200,34 @@ function downloadExcel() {
 
 // -------------------- Voice Input --------------------
 function startVoice() {
+    const input = document.getElementById("chatInput");
+    const chat = document.getElementById("chatMessages");
+
+    // Play beep sound
+    const beep = document.getElementById("beepSound");
+    beep.currentTime = 0;
+    beep.play();
+
+    // Show "Recording..." in chat area
+    const recordingMessage = document.createElement("div");
+    recordingMessage.id = "recordingMessage";
+    recordingMessage.innerHTML = `<b>Assistant:</b> Recording... 🎤`;
+    chat.appendChild(recordingMessage);
+    chat.scrollTop = chat.scrollHeight;
+
+    // Start voice recognition
     const recognition = new webkitSpeechRecognition();
     recognition.onresult = function(event) {
         let voiceText = event.results[0][0].transcript;
-        document.getElementById("chatInput").value = voiceText;
+        input.value = voiceText;
     };
+
+    recognition.onend = function() {
+        // Remove the "Recording..." message when done
+        const msg = document.getElementById("recordingMessage");
+        if (msg) msg.remove();
+    };
+
     recognition.start();
 }
 
@@ -212,7 +236,7 @@ function handleImage() {
     let file = document.getElementById("imageUpload").files[0];
     let chat = document.getElementById("chatMessages");
 
-    chat.innerHTML += `<div><b>You uploaded:</b> ${file.name}</div>`;
+    chat.innerHTML += `<div><b>You upl-oaded:</b> ${file.name}</div>`;
     chat.innerHTML += `<div><b>Assistant:</b> Image received. Processing...</div>`;
 }
 </script>
