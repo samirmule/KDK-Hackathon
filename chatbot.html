@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Multi-Business AI FAQ Generator</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #F8F9FF;
+  color: #1A1A1A;
+}
+h1, h2 {
+  margin: 10px 0;
+}
+button {
+  cursor: pointer;
+}
+
+/* Inputs and selects with Shark Tank cyan-blue style */
+input, select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #00ffff;
+  width: 250px;
+  background: #001f2f;
+  color: #00ffff;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.3s;
+}
+input::placeholder, select::placeholder {
+  color: #00ccccaa;
+}
+input:focus, select:focus {
+  border-color: #32d2aa;
+  background: #003b51;
+}
+
+/* Sections */
+section {
+  padding: 30px;
+  text-align: center;
+}
+.hidden {
+  display: none;
+}
+
+/* Forms */
+form {
+  max-width: 400px;
+  margin: auto;
+  background: #001a28;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow:
+    0 0 10px #00ffff88,
+    inset 0 0 15px #00ffffaa;
+  color: #00ffff;
+}
+
+/* Headings inside forms */
+form h3 {
+  color: #00ffff;
+  text-shadow:
+    0 0 6px #00ffff,
+    0 0 10px #32d2aa;
+  margin-bottom: 20px;
+}
+
+/* Buttons styled to match Shark Tank theme */
+button {
+  background: #00ffff;
+  border: none;
+  color: #001a28;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 12px;
+  transition: background-color 0.3s, color 0.3s;
+}
+button:hover {
+  background: #32d2aa;
+  color: #001f2f;
+}
+
+/* Auth Section container for consistent spacing */
+#authSection {
+  max-width: 450px;
+  margin: 40px auto;
+}
+
+/* Horizontal rule styled */
+hr {
+  border: 0;
+  height: 1px;
+  background: #00ffff44;
+  margin: 40px 0;
+}
+
+/* Dashboard and FAQ keep original styles or add similar if needed */
+/* Hero section left as is from your original, or can be adjusted if you want */
+
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Multi-Business AI FAQ Generator</h1>
+    <p>Businesses and teams can register and manage their FAQs and AI Chatbot.</p>
+  </div>
+  <img src="https://images.unsplash.com/photo-1617196037735-c5932e2650fc?auto=format&fit=crop&w=400&q=80" alt="Bakery Background" class="hero-img" />
+</section>
+
+<!-- Registration / Login -->
+<section id="authSection">
+  <h2>Register / Login</h2>
+  <form id="registerForm">
+    <h3>Business Registration</h3>
+    <input type="text" id="regName" placeholder="Business Name" required /><br />
+    <input type="email" id="regEmail" placeholder="Email" required /><br />
+    <input type="password" id="regPassword" placeholder="Password" required /><br />
+    <button type="button" id="registerBtn">Register</button>
+  </form>
+  <hr />
+  <form id="loginForm">
+    <h3>Login</h3>
+    <input type="email" id="loginEmail" placeholder="Email" required /><br />
+    <input type="password" id="loginPassword" placeholder="Password" required /><br />
+    <button type="button" id="loginBtn">Login</button>
+  </form>
+</section>
+
+<!-- Dashboard -->
+<section id="dashboard" class="hidden">
+  <h2 id="welcomeMsg"></h2> 
+  <button id="logoutBtn">Logout</button>
+
+  <!-- Team Management -->
+  <h3>Team Members</h3>
+  <form id="teamForm">
+    <input type="text" id="teamName" placeholder="Team Member Name" required />
+    <input type="email" id="teamEmail" placeholder="Team Member Email" required />
+    <button type="button" id="addTeamBtn">Add Team Member</button>
+  </form>
+  <div id="teamList"></div>
+
+  <!-- Business Setup -->
+  <h3>Business Details</h3>
+  <input type="text" id="businessType" placeholder="Business Type e.g., Bakery" /><br />
+  <input type="text" id="services" placeholder="Services / Products" /><br />
+  <input type="text" id="location" placeholder="Location" /><br />
+  <input type="text" id="hours" placeholder="Working Hours" /><br />
+  <label>Delivery Available?
+    <select id="delivery">
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </label><br />
+  <button id="saveBusinessBtn">Save Business Info</button>
+
+  <!-- Generated FAQs -->
+  <h3>Generated FAQs</h3>
+  <button id="generateFaqBtn">Generate FAQs</button>
+  <div id="faqContainer"></div>
+</section>
+
+<script>
+// ------------------ AUTH ------------------
+function getBusinesses(){ return JSON.parse(localStorage.getItem("businesses")||"[]"); }
+function saveBusinesses(businesses){ localStorage.setItem("businesses", JSON.stringify(businesses)); }
+
+function registerBusiness(name,email,password){
+  let businesses = getBusinesses();
+  if(businesses.find(b=>b.email===email)){ alert("Email already registered!"); return; }
+  businesses.push({name,email,password,team:[],info:{}}); saveBusinesses(businesses);
+  alert("Registration successful!"); 
+}
+
+function loginBusiness(email,password){
+  let businesses = getBusinesses();
+  let business = businesses.find(b=>b.email===email && b.password===password);
+  if(business){ localStorage.setItem("currentBusiness", JSON.stringify(business)); loadDashboard(); }
+  else alert("Invalid credentials!");
+}
+
+function logoutBusiness(){
+  localStorage.removeItem("currentBusiness");
+  location.reload();
+}
+
+// ------------------ DASHBOARD ------------------
+function loadDashboard(){
+  document.getElementById("authSection").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+  let business = JSON.parse(localStorage.getItem("currentBusiness"));
+  document.getElementById("welcomeMsg").innerText = `Welcome, ${business.name}`;
+  renderTeam();
+  fillBusinessInfo();
+}
+
+function renderTeam(){
+  let business = JSON.parse(localStorage.getItem("currentBusiness"));
+  let teamList = document.getElementById("teamList");
+  teamList.innerHTML = "<ul>" + business.team.map(t=>`<li>${t.name} (${t.email})</li>`).join('') + "</ul>";
+}
+
+function fillBusinessInfo(){
+  let business = JSON.parse(localStorage.getItem("currentBusiness")).info;
+  document.getElementById("businessType").value = business.type||"";
+  document.getElementById("services").value = business.services||"";
+  document.getElementById("location").value = business.location||"";
+  document.getElementById("hours").value = business.hours||"";
+  document.getElementById("delivery").value = business.delivery||"Yes";
+}
+
+// ------------------ SAVE BUSINESS INFO ------------------
+document.getElementById("saveBusinessBtn").addEventListener("click", ()=>{
+  let business = JSON.parse(localStorage.getItem("currentBusiness"));
+  business.info = {
+    type: document.getElementById("businessType").value,
+    services: document.getElementById("services").value,
+    location: document.getElementById("location").value,
+    hours: document.getElementById("hours").value,
+    delivery: document.getElementById("delivery").value
+  };
+  // Update localStorage
+  let businesses = getBusinesses();
+  businesses = businesses.map(b=>b.email===business.email?business:b);
+  saveBusinesses(businesses);
+  localStorage.setItem("currentBusiness", JSON.stringify(business));
+  alert("Business info saved!");
+});
+
+// ------------------ TEAM ------------------
+document.getElementById("addTeamBtn").addEventListener("click", ()=>{
+  let business = JSON.parse(localStorage.getItem("currentBusiness"));
+  let name = document.getElementById("teamName").value;
+  let email = document.getElementById("teamEmail").value;
+  business.team.push({name,email});
+  let businesses = getBusinesses();
+  businesses = businesses.map(b=>b.email===business.email?business:b);
+  saveBusinesses(businesses);
+  localStorage.setItem("currentBusiness", JSON.stringify(business));
+  renderTeam();
+  document.getElementById("teamName").value="";
+  document.getElementById("teamEmail").value="";
+});
+
+// ------------------ NLP ------------------
+function getAnswer(question,businessInfo){
+  const q=question.toLowerCase();
+  if(q.includes("service")||q.includes("product")||q.includes("offer")) return `We offer: ${businessInfo.services||"N/A"}`;
+  if(q.includes("hours")||q.includes("time")||q.includes("working")) return `Our working hours are: ${businessInfo.hours||"N/A"}`;
+  if(q.includes("deliver")||q.includes("delivery")) return `Delivery Available: ${businessInfo.delivery||"N/A"}`;
+  if(q.includes("where")||q.includes("location")||q.includes("address")) return `We are located at: ${businessInfo.location||"N/A"}`;
+  return "Sorry, I can only answer questions related to this business.";
+}
+
+// ------------------ GENERATE FAQ ------------------
+document.getElementById("generateFaqBtn").addEventListener("click", ()=>{
+  let business = JSON.parse(localStorage.getItem("currentBusiness"));
+  let info = business.info;
+  const faqs = [
+    `What services does ${business.name} offer?`,
+    `What are the working hours of ${business.name}?`,
+    `Do you offer delivery?`,
+    `Where is ${business.name} located?`
+  ];
+  const container = document.getElementById("faqContainer");
+  container.innerHTML="";
+  faqs.forEach(faq=>{
+    const div = document.createElement("div");
+    div.className="faq-card";
+    const answer = getAnswer(faq,info);
+    div.innerHTML=`<b>Q:</b> ${faq}<div class="faq-answer"><b>A:</b> ${answer}</div>`;
+    div.addEventListener("click",()=>{ 
+      const ans = div.querySelector(".faq-answer");
+      ans.style.display = ans.style.display==="none"?"block":"none";
+    });
+    container.appendChild(div);
+  });
+});
+
+// ------------------ BUTTONS ------------------
+document.getElementById("registerBtn").addEventListener("click",()=>registerBusiness(
+  document.getElementById("regName").value,
+  document.getElementById("regEmail").value,
+  document.getElementById("regPassword").value
+));
+document.getElementById("loginBtn").addEventListener("click",()=>loginBusiness(
+  document.getElementById("loginEmail").value,
+  document.getElementById("loginPassword").value
+));
+document.getElementById("logoutBtn").addEventListener("click", logoutBusiness);
+
+</script>
+</body>
+</html>
