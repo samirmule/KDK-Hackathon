@@ -1,0 +1,265 @@
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+/* Background */
+body{
+
+background-image:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url("background_image.png");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:40px;
+
+}
+
+
+/* Main Card */
+
+.app-container{
+
+background:white;
+width:900px;
+border-radius:15px;
+box-shadow:0 20px 50px rgba(0,0,0,0.3);
+display:grid;
+grid-template-columns: 1fr 1fr;
+overflow:hidden;
+
+}
+
+/* Left Section */
+
+.left-panel{
+
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+padding:40px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+}
+
+.left-panel h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+.left-panel p{
+opacity:0.9;
+line-height:1.6;
+}
+
+/* Right Section */
+
+.right-panel{
+
+padding:35px;
+background:#f7f9fc;
+
+}
+
+.form-title{
+
+font-size:22px;
+font-weight:600;
+margin-bottom:20px;
+color:#333;
+
+}
+.chatbot{
+
+margin-top:20px;
+background:rgba(255,255,255,0.15);
+padding:18px;
+border-radius:10px;
+
+width:100%;
+max-width:420px;
+
+}
+
+.chat-messages{
+
+height:260px;          /* bigger chat area */
+overflow-y:auto;
+
+background:rgba(0,0,0,0.35);
+padding:12px;
+border-radius:8px;
+margin-bottom:10px;
+font-size:14px;
+line-height:1.5;
+
+}
+.chat-messages div{
+margin-bottom:6px;
+}
+.chat-input-area{
+
+display:flex;
+align-items:center;
+gap:6px;
+
+}
+
+.chat-input-area{
+
+display:flex;
+align-items:center;
+gap:6px;
+
+}
+
+.chat-input-area input{
+
+flex:1;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+background:white;
+color:black;
+font-size:14px;
+width:auto;
+padding:8px 10px;
+}
+
+.upload-btn{
+
+width:32px;
+height:32px;
+background:#ffb703;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-weight:bold;
+font-size:18px;
+color:black;
+
+}
+
+/* Inputs */
+
+input, textarea, select{
+
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:14px;
+transition:0.3s;
+
+}
+
+input:focus, textarea:focus, select:focus{
+
+outline:none;
+border-color:#667eea;
+box-shadow:0 0 5px rgba(102,126,234,0.5);
+
+}
+
+/* Buttons */
+
+button{
+
+padding:10px 14px;
+border:none;
+border-radius:8px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+
+}
+
+/* Generate Button */
+
+.generate-btn{
+
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:white;
+
+}
+
+.generate-btn:hover{
+
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+
+}
+
+/* Download Button */
+
+.download-btn{
+
+background:linear-gradient(135deg,#f7971e,#ffd200);
+color:#333;
+
+}
+
+.download-btn:hover{
+
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+
+}
+
+/* FAQ Box */
+
+.faq{
+
+margin-top:15px;
+background:white;
+border-radius:8px;
+padding:15px;
+border-left:5px solid #667eea;
+max-height:250px;
+overflow-y:auto;
+
+}
+
+.faq h3{
+color:#333;
+margin-bottom:10px;
+}
+
+.faq b{
+color:#222;
+}
+.main-container{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:start;
+
+}
+
+.left-panel{
+
+max-width:450px;
+
+}
+
+.right-panel{
+
+max-width:450px;
+
+}

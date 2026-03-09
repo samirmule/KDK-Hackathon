@@ -1,0 +1,174 @@
+const API="https://script.google.com/macros/s/AKfycbx_x4pRwR2-BVvIc6o2ZxrwyCAmtHR7vQFLTYacevMGVcDTineA9Moh6ZY44uOCwgnKAw/exec";
+
+const loading=document.getElementById("loading");
+
+function showLoad(){loading.style.display="block"}
+function hideLoad(){loading.style.display="none"}
+
+/* THEME */
+
+/* THEME TOGGLE */
+const themeBtn = document.getElementById("themeToggle");
+
+// Set initial icon based on current body class
+themeBtn.innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
+
+themeBtn.onclick = () => {
+  if (document.body.classList.contains("light")) {
+    document.body.classList.remove("light");
+    document.body.classList.add("dark");
+    themeBtn.innerText = "☀️"; // sun icon for dark mode
+  } else {
+    document.body.classList.remove("dark");
+    document.body.classList.add("light");
+    themeBtn.innerText = "🌙"; // moon icon for light mode
+  }
+};
+
+
+
+/* TAB SWITCH */
+
+const signUpBtn=document.getElementById("showSignUp")
+const signInBtn=document.getElementById("showSignIn")
+
+const registerForm=document.getElementById("registerForm")
+const loginForm=document.getElementById("loginForm")
+
+signUpBtn.onclick=()=>{
+registerForm.classList.remove("hidden")
+loginForm.classList.add("hidden")
+}
+
+signInBtn.onclick=()=>{
+loginForm.classList.remove("hidden")
+registerForm.classList.add("hidden")
+}
+
+
+/* REGISTER */
+
+document.getElementById("registerBtn").onclick=async()=>{
+
+const name=document.getElementById("regName").value
+const email=document.getElementById("regEmail").value
+const password=document.getElementById("regPassword").value
+
+showLoad()
+
+const res=await fetch(API,{
+method:"POST",
+body:JSON.stringify({
+action:"register",
+name:name,
+email:email,
+password:password
+})
+})
+
+const data=await res.json()
+
+hideLoad()
+
+if(data.status==="success"){
+
+alert("Registration successful")
+
+}else{
+
+alert(data.message)
+
+}
+
+}
+
+
+/* LOGIN */
+
+document.getElementById("loginBtn").onclick=async()=>{
+
+const email=document.getElementById("loginEmail").value
+const password=document.getElementById("loginPassword").value
+
+showLoad()
+
+const res=await fetch(API,{
+method:"POST",
+body:JSON.stringify({
+action:"login",
+email:email,
+password:password
+})
+})
+
+const data=await res.json()
+
+hideLoad()
+
+if(data.status==="success"){
+
+localStorage.setItem("user",JSON.stringify(data.user))
+
+window.location.href="dashboard.html"
+
+
+}else{
+
+alert("Invalid login")
+
+}
+
+}
+
+
+/* GENERATE FAQ */
+
+document.getElementById("generateBtn").onclick=async()=>{
+
+const name=document.getElementById("bizName").value
+const type=document.getElementById("bizType").value
+const services=document.getElementById("bizServices").value
+const location=document.getElementById("bizLocation").value
+const hours=document.getElementById("bizHours").value
+const delivery=document.getElementById("bizDelivery").value
+
+const user=JSON.parse(localStorage.getItem("user"))
+
+const faq=`
+
+<h3>Generated FAQs</h3>
+
+<b>1. What services does ${name} provide?</b>
+<p>${services}</p>
+
+<b>2. What type of business is ${name}?</b>
+<p>${type}</p>
+
+<b>3. What are the working hours?</b>
+<p>${hours}</p>
+
+<b>4. Does ${name} provide delivery?</b>
+<p>${delivery}</p>
+
+<b>5. Where is ${name} located?</b>
+<p>${location}</p>
+
+`
+
+document.getElementById("faqOutput").innerHTML=faq
+
+await fetch(API,{
+method:"POST",
+body:JSON.stringify({
+action:"faq",
+businessName:name,
+email:user.email,
+type:type,
+services:services,
+location:location,
+hours:hours,
+delivery:delivery
+})
+})
+
+}
